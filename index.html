@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Articles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6f5;--ink:#15221f;--mute:#5d6b67;--line:#d5dcd9;--accent:#0f6b5c;--chip:#e5ebe8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101816;--ink:#e6eeeb;--mute:#93a39e;--line:#26352f;--accent:#5fd0b8;--chip:#1a2622}}
+:root[data-theme="dark"]{--bg:#101816;--ink:#e6eeeb;--mute:#93a39e;--line:#26352f;--accent:#5fd0b8;--chip:#1a2622}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Newsreader',Georgia,serif;font-size:19px;line-height:1.65}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:700px;margin:0 auto;padding:0 22px 80px}
+.sans{font-family:'Instrument Sans',system-ui,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;padding:28px 0 8px}
+.brand{font-family:'Instrument Sans',system-ui,sans-serif;font-weight:600;text-decoration:none;font-size:15px}
+.theme{background:none;border:1px solid var(--line);color:var(--ink);border-radius:20px;padding:5px 12px;font:inherit;font-family:'Instrument Sans',system-ui,sans-serif;font-size:13px;cursor:pointer}
+.intro{padding:56px 0 34px}
+.intro h1{font-size:clamp(38px,8vw,60px);line-height:1.05;margin:0 0 16px;font-weight:600;letter-spacing:-.02em}
+.intro p{margin:0;color:var(--mute);max-width:32em}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:8px;font-family:'Instrument Sans',system-ui,sans-serif}
+.tools input{flex:1 1 200px;background:transparent;border:1px solid var(--line);border-radius:8px;padding:9px 12px;color:var(--ink);font:inherit;font-size:14px}
+.chip{background:var(--chip);border:0;color:var(--ink);border-radius:20px;padding:6px 13px;font:inherit;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--bg)}
+.item{display:block;text-decoration:none;padding:26px 0;border-top:1px solid var(--line)}
+.item h2{font-size:28px;line-height:1.2;margin:6px 0 8px;font-weight:600;letter-spacing:-.01em}
+.item:hover h2{color:var(--accent)}
+.item p{margin:0;color:var(--mute)}
+.meta{font-family:'Instrument Sans',system-ui,sans-serif;font-size:13px;color:var(--mute)}
+.empty{padding:30px 0;color:var(--mute);border-top:1px solid var(--line)}
+.back{display:inline-block;margin:34px 0 10px;font-family:'Instrument Sans',system-ui,sans-serif;font-size:14px;color:var(--accent);text-decoration:none}
+article h1{font-size:clamp(34px,7vw,50px);line-height:1.1;margin:8px 0 14px;font-weight:600;letter-spacing:-.02em}
+article .body{margin-top:34px}
+article .body p{margin:0 0 1.2em}
+article .body h3{font-size:24px;margin:1.8em 0 .5em}
+article .body blockquote{margin:1.5em 0;padding-left:18px;border-left:3px solid var(--accent);font-style:italic}
+footer{border-top:1px solid var(--line);margin-top:50px;padding-top:20px;color:var(--mute);font-size:14px;font-family:'Instrument Sans',system-ui,sans-serif}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><a class="brand" href="#/">My Articles</a><button class="theme" id="theme" type="button">Theme</button></header>
+<main id="app"></main>
+<footer id="foot"></footer>
+</div>
+<script>
+/* ============ EDIT HERE ============
+   Replace SITE and ARTICLES with your own content.
+   Each article: id (unique, no spaces), title, date (YYYY-MM-DD), tags, summary,
+   body (HTML: <p>, <h3>, <blockquote>). */
+const SITE={
+  name:"Your Name",
+  tagline:"Essays and notes on the things I'm working through.",
+  footer:"© 2026 Your Name. All rights reserved."
+};
+const ARTICLES=[
+  {id:"first-article",title:"Replace this with your first article title",date:"2026-09-20",tags:["Essay"],
+   summary:"A one or two sentence summary shown on the home page.",
+   body:"<p>Paste your article text here. Wrap each paragraph in a p tag.</p><h3>A section heading</h3><p>Continue with more text.</p><blockquote>A pull quote looks like this.</blockquote><p>Final paragraph.</p>"},
+  {id:"second-article",title:"Replace this with your second article title",date:"2026-08-11",tags:["Notes"],
+   summary:"Another short summary. Add as many articles as you like.",
+   body:"<p>Your second article goes here.</p>"},
+  {id:"third-article",title:"Replace this with your third article title",date:"2026-06-02",tags:["Essay","Guide"],
+   summary:"Tags are created automatically and become filter buttons.",
+   body:"<p>Your third article goes here.</p>"}
+];
+/* ============ END EDIT ============ */
+
+const app=document.getElementById('app');
+let tag='All',q='';
+const fmt=d=>new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+const mins=h=>Math.max(1,Math.round(h.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length/220));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sorted=[...ARTICLES].sort((a,b)=>b.date.localeCompare(a.date));
+
+function home(){
+  document.title=SITE.name+' — Articles';
+  const tags=['All',...new Set(sorted.flatMap(a=>a.tags||[]))];
+  app.innerHTML=`<section class="intro"><h1>${esc(SITE.name)}</h1><p>${esc(SITE.tagline)}</p></section>
+  <div class="tools"><input id="s" type="search" placeholder="Search articles" aria-label="Search articles" value="${esc(q)}">
+  ${tags.map(t=>`<button class="chip" type="button" data-t="${esc(t)}" aria-pressed="${t===tag}">${esc(t)}</button>`).join('')}</div>
+  <div id="list"></div>`;
+  const s=document.getElementById('s');
+  s.oninput=()=>{q=s.value;list()};
+  app.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{tag=b.dataset.t;app.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));list()});
+  list();
+}
+function list(){
+  const k=q.trim().toLowerCase();
+  const r=sorted.filter(a=>(tag==='All'||(a.tags||[]).includes(tag))&&(!k||(a.title+a.summary+a.body).toLowerCase().includes(k)));
+  document.getElementById('list').innerHTML=r.length?r.map(a=>`<a class="item" href="#/${encodeURIComponent(a.id)}">
+    <div class="meta">${fmt(a.date)} &nbsp;|&nbsp; ${mins(a.body)} min read${a.tags&&a.tags.length?' &nbsp;|&nbsp; '+a.tags.map(esc).join(', '):''}</div>
+    <h2>${esc(a.title)}</h2><p>${esc(a.summary)}</p></a>`).join(''):'<div class="empty">No articles match your search. Clear the search or choose another tag.</div>';
+}
+function read(id){
+  const a=ARTICLES.find(x=>x.id===id);
+  if(!a){location.hash='#/';return}
+  document.title=a.title+' — '+SITE.name;
+  app.innerHTML=`<a class="back" href="#/">Back to all articles</a>
+  <article><div class="meta">${fmt(a.date)} &nbsp;|&nbsp; ${mins(a.body)} min read</div><h1>${esc(a.title)}</h1><div class="body">${a.body}</div></article>`;
+}
+function route(){
+  const h=decodeURIComponent(location.hash.replace(/^#\/?/,''));
+  h?read(h):home();
+  window.scrollTo(0,0);
+}
+document.getElementById('foot').textContent=SITE.footer;
+const root=document.documentElement;
+document.getElementById('theme').onclick=()=>{
+  const dark=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+  root.dataset.theme=dark?'light':'dark';
+};
+addEventListener('hashchange',route);
+route();
+</script>
+</body>
+</html>
